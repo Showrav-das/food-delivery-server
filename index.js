@@ -2,6 +2,7 @@ const express = require('express')
 const { MongoClient } = require('mongodb');
 const app = express()
 var cors = require('cors')
+const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config();
 const port =process.env.PORT || 4000;
 
@@ -24,6 +25,16 @@ async function run() {
             const cursor = foodsCollection.find(query);
             const allFoods = await cursor.toArray();
             res.json(allFoods);
+        })
+
+       
+        app.get('/allfoods:_id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const query = { _id: ObjectId(id) };
+            const details = await foodsCollection.findOne(query);
+            // res.json(details);
+            console.log(details);
         })
 
         app.post('/allfoods', async (req, res) => {
